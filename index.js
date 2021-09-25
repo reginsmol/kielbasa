@@ -58,7 +58,30 @@ function prompt(input) {
  * @returns {string}
  */
 function getOperator(operator) {
-    return ['+', '-', '*', '/'].find(o => o === operator);
+    let operators = {
+        '+': add,
+        '-': subtract,
+        '*': multiply,
+        '/': divide
+    }
+
+    return operators[operator]
+}
+
+function add(a, b) {
+    return a + b;
+}
+
+function subtract(a, b) {
+    return a - b ;
+}
+
+function multiply(a, b) {
+    return a * b;
+}
+
+function divide(a, b) {
+    return a / b;
 }
 
 /**
@@ -88,14 +111,13 @@ function handleInput(input) {
     } else if(getOperator(input)) {
         evaluate(input)
     }
-
 }
 
 function evaluate(operator) {
     if(stack.length >= 2) {
         let a = stack[0];
         let b = stack[1];
-        let result = eval(`${a}${operator}${b}`)
+        let result = getOperator(operator)(a, b);
         stack.shift()
         stack.shift()
         stack.push(result)
