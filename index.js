@@ -13,7 +13,7 @@ function init() {
         output: stdout,
     });
 
-    const startupMessage = `kielbasa supports the following operators: + - * /`;
+    const startupMessage = `kielbasa supports the following operators: + - * / ^`;
 
     console.log(startupMessage);
 
@@ -32,13 +32,17 @@ function getSpecialCommands(command) {
             console.clear()
         },
         q: process.exit,
+        s: () => {
+            console.log(stack.join(' '))
+        },
         h: () => {
             console.log(
-                String.raw`kielbasa is an RPN calculator that accepts the following operators: + - * /
+                String.raw`kielbasa is an RPN calculator that accepts the following operators: + - * / ^
 Commands:                
 c - clears all output and previous commands
 q - quits kielbasa
-h - help`
+h - help
+s - prints the stack to the console`
             );
         }
 
@@ -68,7 +72,8 @@ function getOperator(operator) {
         '+': add,
         '-': subtract,
         '*': multiply,
-        '/': divide
+        '/': divide,
+        '^': exponent
     }
 
     return operators[operator]
@@ -90,6 +95,10 @@ function divide(a, b) {
     return a / b;
 }
 
+function exponent(a, b) {
+    return a ** b;
+}
+
 /**
  * Looks for and calls callbacks for special commands
  * @param input
@@ -109,15 +118,23 @@ function handleSpecialCommands(input) {
  * @param input
  */
 function handleInput(input) {
-    if(getSpecialCommands(input)) {
-        handleSpecialCommands(input)
-    } else if(numberValidator(input)) {
-        console.log(input)
-        stack.push(parseInt(input));
-    } else if(getOperator(input)) {
-        evaluate(input)
+    if (input.indexOf(' ') > -1) {
+        const split = input.split(' ')
+
+        split.forEach(item => {
+            // This isn't ideal, because we end up validating twice but its better than nuking the runtime with infinite recursion ¯\_(ツ)_/¯
+            if(numberValidator(item) || getOperator(item) || getSpecialCommands(item)) {
+                handleInput(item)
+            }
+        })
     } else {
-        console.log(input)
+        if(getSpecialCommands(input)) {
+            handleSpecialCommands(input)
+        } else if(numberValidator(input)) {
+            stack.push(parseInt(input));
+        } else if(getOperator(input)) {
+            evaluate(input)
+        }
     }
 }
 
