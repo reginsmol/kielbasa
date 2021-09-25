@@ -134,6 +134,8 @@ function handleInput(input) {
             stack.push(parseInt(input));
         } else if(getOperator(input)) {
             evaluate(input)
+        } else {
+            console.log(`Invalid input: ${input}`)
         }
     }
 }
@@ -148,8 +150,7 @@ function evaluate(operator) {
         let b = stack[stack.length - 1];
         let result = getOperator(operator)(a, b);
 
-        stack.splice(stack.length - 1)
-        stack.splice(stack.length - 1)
+        stack.splice(stack.length - 2, 2);
 
         stack.push(result)
 
