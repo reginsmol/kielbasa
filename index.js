@@ -27,15 +27,21 @@ function init() {
  */
 function getSpecialCommands(command) {
     const commands = {
-        c: console.clear,
+        c: () => {
+            stack.length = 0;
+            console.clear()
+        },
         q: process.exit,
-        h: (() => {
+        h: () => {
             console.log(
-                String.raw`c: clears all output and previous commands
-q: quits kielbasa
-h: help`
+                String.raw`kielbasa is an RPN calculator that accepts the following operators: + - * /
+Commands:                
+c - clears all output and previous commands
+q - quits kielbasa
+h - help`
             );
-        })
+        }
+
     }
 
     return commands[command];
@@ -110,17 +116,26 @@ function handleInput(input) {
         stack.push(parseInt(input));
     } else if(getOperator(input)) {
         evaluate(input)
+    } else {
+        console.log(input)
     }
 }
 
+/**
+ * Evaluate the expression applying the arithmetic to the last 2 indexes of the stack, removing them, then pushing the result.
+ * @param operator
+ */
 function evaluate(operator) {
     if(stack.length >= 2) {
-        let a = stack[0];
-        let b = stack[1];
+        let a = stack[stack.length - 2];
+        let b = stack[stack.length - 1];
         let result = getOperator(operator)(a, b);
-        stack.shift()
-        stack.shift()
+
+        stack.splice(stack.length - 1)
+        stack.splice(stack.length - 1)
+
         stack.push(result)
+
         console.log(result)
     }
 }
