@@ -1,6 +1,8 @@
 import {stdin, stdout} from 'process';
 import readline from 'readline';
 
+const stack = [];
+
 /**
  * Initializes the application setting up the stdin/stdout and prompting the user
  */
@@ -60,24 +62,6 @@ function getOperator(operator) {
 }
 
 /**
- * Handle the incoming values and delegate the behaviors accordingly
- * @param input
- */
-function handleInput(input) {
-    if(getSpecialCommands(input)) {
-        handleSpecialCommands(input)
-    } else if(getOperator(input)) {
-       console.log('Valid operator', getOperator(input))
-   } else {
-       if(numberValidator(input)) {
-           console.log('Valid number')
-       } else {
-           console.log(`Invalid input: ${input}`)
-       }
-   }
-}
-
-/**
  * Looks for and calls callbacks for special commands
  * @param input
  */
@@ -92,12 +76,40 @@ function handleSpecialCommands(input) {
 }
 
 /**
+ * Handle the incoming values and delegate the behaviors accordingly
+ * @param input
+ */
+function handleInput(input) {
+    if(getSpecialCommands(input)) {
+        handleSpecialCommands(input)
+    } else if(numberValidator(input)) {
+        console.log(input)
+        stack.push(parseInt(input));
+    } else if(getOperator(input)) {
+        evaluate(input)
+    }
+
+}
+
+function evaluate(operator) {
+    if(stack.length >= 2) {
+        let a = stack[0];
+        let b = stack[1];
+        let result = eval(`${a}${operator}${b}`)
+        stack.shift()
+        stack.shift()
+        stack.push(result)
+        console.log(result)
+    }
+}
+
+/**
  * Ensure we're actually dealing with a number and that it is within reasonable bounds for getting accurate calculations
  * @param input
  * @returns {boolean}
  */
 function numberValidator(input) {
-    let parsedInt = parseInt(input);
+    const parsedInt = parseInt(input);
     return !isNaN(parsedInt) && (parsedInt >= Number.MIN_SAFE_INTEGER && parsedInt <= Number.MAX_SAFE_INTEGER);
 }
 
