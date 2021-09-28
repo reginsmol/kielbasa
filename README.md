@@ -11,7 +11,7 @@ I really tried to lean into JavaScript's functional nature to make adding new op
 
 I used a simple stack datatype for storing the operations similar to the first computer implementations of the notation
 
-I used recursion to minimize the amount of overall code needed. The `handleInput()` function will handle both operations given on a single line e.g. `5 5 5 8 + + -` and operations given sequentially. This allowed me to have on function handle both scenarios based on context requiring only a single function.
+I used recursion to minimize the amount of overall code needed. The `handleInput()` function will handle both operations given on a single line e.g. `5 5 5 8 + + -` and operations given sequentially. This allowed me to have one function handle both scenarios based on context requiring only a single function.
 
 ## Tradeoffs
 Had I had more time I would've come up with a better way of storing the operations rather than a global variable, given the time and scope I think this approach was sufficient.
