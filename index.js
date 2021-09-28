@@ -1,3 +1,3 @@
-import {init} from './functions';
+const {init} = require('./lib/functions.js');
 
 init();
