@@ -1,6 +1,5 @@
 const readline = require("readline");
 const sinon = require('sinon')
-
 const assert = require('assert')
 
 describe('kielbasa', () => {
