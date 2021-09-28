@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "type": "module",
+  "type": "commonjs",
   "scripts": {
     "test": "node ./node_modules/mocha/bin/mocha test/test.js",
     "start": "node index.js"
